@@ -17,8 +17,7 @@ Place [x] for what applies.
 
 Add your UML class diagram here.
 
-Replace the following image with your diagram. You can draw it by hand and take a photo.
-![UML Class Diagram](UML_class.png)
+![UML_File.jpg](UML_File.jpg)
 
 ## Answers
 
