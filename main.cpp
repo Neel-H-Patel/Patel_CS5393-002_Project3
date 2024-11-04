@@ -68,3 +68,25 @@ Challenges and Solutions:
 // https://www.cplusplus.com/reference/vector/vector/
 // https://www.geeksforgeeks.org/file-input-output-stream-cpp/
 // https://www.geeksforgeeks.org/rule-three-cpp/
+
+
+/* 
+Time and Space Complexity Analysis
+
+1. DSString Class:
+   - Insertion and assignment operations: O(n), where n is the length of the string.
+   - Search operations: O(n), as each character may need to be traversed.
+
+2. SentimentClassifier:
+   - Training Phase:
+     - Inserting n words into the unordered_map: Average O(1) per insertion, total O(n).
+   - Prediction Phase:
+     - For each tweet, checking each word's frequency: O(m), where m is the number of words in the tweet.
+   - Evaluation Phase:
+     - Comparing predictions with ground truth: O(k), where k is the number of testing tweets.
+
+3. Overall:
+   - Time complexity is primarily dependent on the number of tweets and words.
+   - Space complexity is O(V), where V is the number of unique words in the training dataset.
+
+*/
