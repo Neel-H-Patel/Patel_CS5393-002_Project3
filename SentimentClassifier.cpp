@@ -5,6 +5,7 @@
 #include <vector>
 #include <cctype>
 #include <iomanip>
+#include <chrono>
 #include <unordered_set>
 
 std::unordered_set<std::string> stopWords = {
@@ -75,6 +76,8 @@ std::vector<std::string> parseCSVLine(const std::string& line) {
 }
 
 void SentimentClassifier::train(const char* trainingDataFile) {
+    auto start = std::chrono::steady_clock::now();  // Start timer
+
     std::ifstream infile(trainingDataFile);
     if (!infile.is_open()) {
         std::cerr << "Error opening training data file." << std::endl;
@@ -139,9 +142,15 @@ void SentimentClassifier::train(const char* trainingDataFile) {
     }
 
     infile.close();
+
+    auto end = std::chrono::steady_clock::now();  // End timer
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::cout << "Training time: " << elapsed_seconds.count() << "s\n";
 }
 
 void SentimentClassifier::predict(const char* testingDataFile, const char* outputFile) {
+    auto start = std::chrono::steady_clock::now();  // Start timer
+
     std::ifstream infile(testingDataFile);
     std::ofstream outfile(outputFile);
     if (!infile.is_open() || !outfile.is_open()) {
@@ -211,9 +220,15 @@ void SentimentClassifier::predict(const char* testingDataFile, const char* outpu
 
     infile.close();
     outfile.close();
+
+    auto end = std::chrono::steady_clock::now();  // End timer
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::cout << "Prediction time: " << elapsed_seconds.count() << "s\n";
 }
 
 void SentimentClassifier::evaluatePredictions(const char* predictionsFile, const char* groundTruthFile, const char* accuracyFile) {
+    auto start = std::chrono::steady_clock::now();  // Start timer
+
     std::ifstream predFile(predictionsFile);
     std::ifstream truthFile(groundTruthFile);
     std::ofstream accFile(accuracyFile);
@@ -299,4 +314,8 @@ void SentimentClassifier::evaluatePredictions(const char* predictionsFile, const
     predFile.close();
     truthFile.close();
     accFile.close();
+
+    auto end = std::chrono::steady_clock::now();  // End timer
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::cout << "Evaluation time: " << elapsed_seconds.count() << "s\n";
 }
