@@ -32,14 +32,14 @@ Replace the following image with your diagram. You can draw it by hand and take 
 
 2. How long did your code take for training and what is the time complexity of your training implementation (Big-Oh notation)? Remember that training includes reading the tweets, breaking it into words, counting, ... Explain why you get this complexity (e.g., what does `N` stand for and how do your data structures/algorithms affect the complexity).
 
-   > The training code took approximately 2 minutes to run. The time complexity is O(N x L), where N is the number of 
+   > The training code took 0.742974s to run. The time complexity is O(N x L), where N is the number of 
    > tweets and L is the average length of a tweet. Each tweet is processed individually, and tokenization operates 
    > over its length. Updating word counts in std::unordered_map takes average constant time, so the overall complexity 
    > depends on the total number of tweets and their lengths.
 
 3. How long did your code take for classification and what is the time complexity of your classification implementation (Big-Oh notation)? Explain why.
 
-   > Classification took about 1 minute. The time complexity is O(M x L'), where M is the number of tweets to classify 
+   > Classification took about 0.399647s. The time complexity is O(M x L'), where M is the number of tweets to classify 
    > and L' is the average tweet length. Each tweet undergoes preprocessing and scoring, with word lookups in hash maps 
    > taking constant time. Therefore, the complexity scales linearly with the number of tweets and their lengths.
 
