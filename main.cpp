@@ -362,7 +362,45 @@ public:
     }
 };
 
+int main(int argc, char* argv[]) {
+    // Ensure correct number of command-line arguments
+    if (argc != 6) {
+        cerr << "Usage: " << argv[0] << " <training_data.csv> <testing_data.csv> <ground_truth.csv> <results.csv> <accuracy.txt>" << endl;
+        return 1;
+    }
 
+    string trainingFile = argv[1];
+    string testingFile = argv[2];
+    string groundTruthFile = argv[3];
+    string resultsFile = argv[4];
+    string accuracyFile = argv[5];
+
+    try {
+        SentimentClassifier classifier;
+
+        // Training Phase
+        cout << "Training classifier with data from: " << trainingFile << endl;
+        classifier.train(trainingFile);
+        cout << "Training completed." << endl;
+
+        // Evaluation Phase
+        cout << "Evaluating classifier with testing data from: " << testingFile << endl;
+        pair<double, vector<pair<int, long>>> evaluation = classifier.evaluate(testingFile, groundTruthFile, resultsFile, accuracyFile);
+        cout << "Evaluation completed." << endl;
+
+        // Display Accuracy
+        cout << "Accuracy: " << fixed << setprecision(3) << evaluation.first << endl;
+        if (evaluation.first >= 0.72) {
+            cout << "Bonus Points Achieved: +5" << endl;
+        }
+
+    } catch (const exception& e) {
+        cerr << "Exception: " << e.what() << endl;
+        return 1;
+    }
+
+    return 0;
+}
 
 // Time and Space Complexity Analysis
 
