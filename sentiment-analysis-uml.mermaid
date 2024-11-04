@@ -1,0 +1,56 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'primaryColor': '#e6f3ff',
+    'primaryTextColor': '#000',
+    'primaryBorderColor': '#2980b9',
+    'lineColor': '#2980b9',
+    'secondaryColor': '#fdf5e6',
+    'tertiaryColor': '#fff5ee'
+  }
+}}%%
+classDiagram
+    class DSString {
+        <<String Management>>
+        -char* data
+        -size_t len
+        +DSString()
+        +DSString(const char* str)
+        +DSString(const DSString& other)
+        +~DSString()
+        +operator=(const DSString&) DSString&
+        +length() size_t
+        +operator[](size_t) char&
+        +operator[](size_t) const char&
+        +operator+(const DSString&) DSString
+        +operator==(const DSString&) bool
+        +operator<(const DSString&) bool
+        +substring(size_t, size_t) DSString
+        +toLower() DSString
+        +c_str() const char*
+    }
+
+    class SentimentClassifier {
+        <<Analysis Engine>>
+        -unordered_map~DSString,int~ positiveWordCounts
+        -unordered_map~DSString,int~ negativeWordCounts
+        -int totalPositiveTweets
+        -int totalNegativeTweets
+        +train(const char*) void
+        +predict(const char*, const char*) void
+        +evaluatePredictions(const char*, const char*, const char*) void
+    }
+
+    class Main {
+        <<Program Entry>>
+        +main(int argc, char** argv) int
+    }
+
+    %% Relationships with labels
+    Main ..> SentimentClassifier : instantiates
+    SentimentClassifier --> "many" DSString : processes
+    
+    %% Notes for better understanding
+    note for DSString "Custom string implementation\nfor efficient text processing"
+    note for SentimentClassifier "Handles sentiment analysis\nusing word frequency analysis"
+    note for Main "Command-line interface\nfor the sentiment analyzer"
