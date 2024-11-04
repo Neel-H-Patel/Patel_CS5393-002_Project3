@@ -69,24 +69,162 @@ Challenges and Solutions:
 // https://www.geeksforgeeks.org/file-input-output-stream-cpp/
 // https://www.geeksforgeeks.org/rule-three-cpp/
 
+// import necessary libraries
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <unordered_map>
+#include <sstream>
+#include <iomanip>
+#include <exception>
+#include <cstring> // Only for temporary usage outside DSString
 
-/* 
-Time and Space Complexity Analysis
+using namespace std;
 
+// DSString Class Implementation
+class DSString {
+private:
+    char* data;
+    int len;
+
+public:
+    // Default Constructor
+    DSString() : data(nullptr), len(0) {}
+
+    // Parameterized Constructor
+    DSString(const char* s) {
+        if (s) {
+            len = strlen(s);
+            data = new char[len + 1];
+            strcpy(data, s);
+        } else {
+            data = nullptr;
+            len = 0;
+        }
+    }
+
+    // Copy Constructor
+    DSString(const DSString& other) {
+        len = other.len;
+        if (other.data) {
+            data = new char[len + 1];
+            strcpy(data, other.data);
+        } else {
+            data = nullptr;
+        }
+    }
+
+    // Copy Assignment Operator
+    DSString& operator=(const DSString& other) {
+        if (this == &other)
+            return *this;
+
+        delete[] data;
+
+        len = other.len;
+        if (other.data) {
+            data = new char[len + 1];
+            strcpy(data, other.data);
+        } else {
+            data = nullptr;
+        }
+        return *this;
+    }
+
+    // Destructor
+    ~DSString() {
+        delete[] data;
+    }
+
+    // Get Length
+    int length() const {
+        return len;
+    }
+
+    // Get C-String
+    const char* c_str() const {
+        return data;
+    }
+
+    // Convert to lowercase
+    DSString toLower() const {
+        DSString lowerStr;
+        lowerStr.len = len;
+        lowerStr.data = new char[len + 1];
+        for (int i = 0; i < len; ++i) {
+            lowerStr.data[i] = tolower(data[i]);
+        }
+        lowerStr.data[len] = '\0';
+        return lowerStr;
+    }
+
+    // Overload += operator for concatenation
+    DSString& operator+=(const DSString& other) {
+        char* newData = new char[len + other.len + 1];
+        if (data) {
+            strcpy(newData, data);
+        }
+        if (other.data) {
+            strcpy(newData + len, other.data);
+        }
+        delete[] data;
+        data = newData;
+        len += other.len;
+        return *this;
+    }
+
+    // Overload << operator for output
+    friend ostream& operator<<(ostream& os, const DSString& s) {
+        if (s.data)
+            os << s.data;
+        return os;
+    }
+
+    // Overload == operator for comparison
+    bool operator==(const DSString& other) const {
+        if (len != other.len)
+            return false;
+        if (data == nullptr && other.data == nullptr)
+            return true;
+        if (data == nullptr || other.data == nullptr)
+            return false;
+        return strcmp(data, other.data) == 0;
+    }
+};
+
+
+// Time and Space Complexity Analysis
+
+/*
 1. DSString Class:
-   - Insertion and assignment operations: O(n), where n is the length of the string.
-   - Search operations: O(n), as each character may need to be traversed.
+
+   c. Time complexity of operations in (i) and (ii):
+      - (i) Inserting words into the trie: O(m) per insertion, where m is the length of the word.
+      - (ii) Searching for a word in the trie: O(m) per search.
+
+   d. Time complexity of operations in (iii) and (iv):
+      - (iii) Finding words with a given prefix: O(p + w), where p is the length of the prefix and w is the number of words with that prefix.
+      - (iv) Searching for short words: O(k) per search, where k is the length of the short word.
+
+   e. Space complexity of the trie of n words:
+      - O(N * M), where N is the number of words and M is the average length of the words.
+      - Each node can have up to 26 children (for each alphabet letter), but space is only allocated for characters that are used.
 
 2. SentimentClassifier:
-   - Training Phase:
-     - Inserting n words into the unordered_map: Average O(1) per insertion, total O(n).
-   - Prediction Phase:
-     - For each tweet, checking each word's frequency: O(m), where m is the number of words in the tweet.
-   - Evaluation Phase:
-     - Comparing predictions with ground truth: O(k), where k is the number of testing tweets.
 
-3. Overall:
-   - Time complexity is primarily dependent on the number of tweets and words.
-   - Space complexity is O(V), where V is the number of unique words in the training dataset.
+   c. Time complexity of operations in (i) and (ii):
+      - (i) Training the classifier: O(T * W), where T is the number of training tweets and W is the average number of words per tweet.
+      - (ii) Predicting sentiment for a tweet: O(W), where W is the number of words in the tweet.
+
+   d. Time complexity of operations in (iii) and (iv):
+      - (iii) Evaluating predictions: O(E), where E is the number of testing tweets.
+      - (iv) Writing results and accuracy: O(E).
+
+   e. Space complexity of the SentimentClassifier:
+      - O(V), where V is the number of unique words in the training dataset.
+      - Uses unordered_maps to store word counts for positive and negative sentiments.
+
+Overall, the classifier's performance is primarily influenced by the number of tweets and the vocabulary size. Efficient use of 
+unordered_maps ensures that word frequency lookups are performed in constant time on average, contributing to the overall efficiency of the system.
 
 */
