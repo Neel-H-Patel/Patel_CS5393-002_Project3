@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.29"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Assignment2_sentiment",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Assignment2_sentiment::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Assignment2_sentiment-Debug-ad9df97479d7fceeecf1.json",
+					"name" : "Assignment2_sentiment",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "test_DSString::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test_DSString-Debug-83d779e00bbc9f831033.json",
+					"name" : "test_DSString",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/ishol/CLionProjects/Assignment2_sentiment/cmake-build-debug",
+		"source" : "C:/Users/ishol/CLionProjects/Assignment2_sentiment"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

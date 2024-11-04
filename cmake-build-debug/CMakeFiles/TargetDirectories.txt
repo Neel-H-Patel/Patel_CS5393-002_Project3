@@ -1,0 +1,4 @@
+C:/Users/ishol/CLionProjects/Assignment2_sentiment/cmake-build-debug/CMakeFiles/Assignment2_sentiment.dir
+C:/Users/ishol/CLionProjects/Assignment2_sentiment/cmake-build-debug/CMakeFiles/test_DSString.dir
+C:/Users/ishol/CLionProjects/Assignment2_sentiment/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ishol/CLionProjects/Assignment2_sentiment/cmake-build-debug/CMakeFiles/rebuild_cache.dir
