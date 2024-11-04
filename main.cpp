@@ -192,6 +192,177 @@ public:
     }
 };
 
+// SentimentClassifier Class Implementation
+class SentimentClassifier {
+private:
+    unordered_map<string, int> positiveWordCount;
+    unordered_map<string, int> negativeWordCount;
+    int totalPositiveWords;
+    int totalNegativeWords;
+
+    // Helper function to tokenize a tweet into words
+    vector<string> tokenize(const string& tweet) {
+        vector<string> words;
+        string word;
+        stringstream ss(tweet);
+        while (ss >> word) {
+            // Remove punctuation from word
+            word.erase(remove_if(word.begin(), word.end(), ::ispunct), word.end());
+            // Convert to lowercase
+            for (auto & c: word) c = tolower(c);
+            if (!word.empty())
+                words.push_back(word);
+        }
+        return words;
+    }
+
+public:
+    // Constructor
+    SentimentClassifier() : totalPositiveWords(0), totalNegativeWords(0) {}
+
+    // Training function
+    void train(const string& trainingFile) {
+        ifstream infile(trainingFile);
+        if (!infile.is_open()) {
+            throw runtime_error("Unable to open training file.");
+        }
+
+        string line;
+        while (getline(infile, line)) {
+            if (line.empty()) continue;
+            // Split CSV line
+            vector<string> fields;
+            stringstream ss(line);
+            string field;
+            while (getline(ss, field, ',')) {
+                fields.push_back(field);
+            }
+
+            if (fields.size() < 6) continue; // Invalid line
+
+            int sentiment = stoi(fields[0]);
+            string tweet = fields[5];
+            
+            // Tokenize tweet
+            vector<string> words = tokenize(tweet);
+
+            if (sentiment == 4) { // Positive
+                for (const string& word : words) {
+                    positiveWordCount[word]++;
+                    totalPositiveWords++;
+                }
+            }
+            else if (sentiment == 0) { // Negative
+                for (const string& word : words) {
+                    negativeWordCount[word]++;
+                    totalNegativeWords++;
+                }
+            }
+            // Ignore other sentiment values
+        }
+
+        infile.close();
+    }
+
+    // Prediction function
+    int predict(const string& tweet) {
+        vector<string> words = tokenize(tweet);
+        double positiveScore = 0.0;
+        double negativeScore = 0.0;
+
+        for (const string& word : words) {
+            if (positiveWordCount.find(word) != positiveWordCount.end()) {
+                positiveScore += (double)positiveWordCount[word] / totalPositiveWords;
+            }
+            if (negativeWordCount.find(word) != negativeWordCount.end()) {
+                negativeScore += (double)negativeWordCount[word] / totalNegativeWords;
+            }
+        }
+
+        return (positiveScore >= negativeScore) ? 4 : 0;
+    }
+
+    // Evaluation function
+    pair<double, vector<pair<int, long>>> evaluate(const string& testingFile, const string& groundTruthFile, const string& resultsFile, const string& accuracyFile) {
+        ifstream testFile(testingFile);
+        ifstream groundFile(groundTruthFile);
+        ofstream resFile(resultsFile);
+        ofstream accFile(accuracyFile);
+
+        if (!testFile.is_open() || !groundFile.is_open()) {
+            throw runtime_error("Unable to open testing or ground truth file.");
+        }
+        if (!resFile.is_open() || !accFile.is_open()) {
+            throw runtime_error("Unable to open results or accuracy output file.");
+        }
+
+        // Read ground truth into a map
+        unordered_map<long, int> groundTruthMap;
+        string groundLine;
+        while (getline(groundFile, groundLine)) {
+            if (groundLine.empty()) continue;
+            stringstream ss(groundLine);
+            string sentimentStr, idStr;
+            getline(ss, sentimentStr, ',');
+            getline(ss, idStr, ',');
+            int sentiment = stoi(sentimentStr);
+            long id = stol(idStr);
+            groundTruthMap[id] = sentiment;
+        }
+
+        // Process testing data and make predictions
+        string testLine;
+        double correct = 0.0;
+        double total = 0.0;
+        vector<pair<int, long>> errors; // Pair of (ground truth, tweet ID)
+
+        while (getline(testFile, testLine)) {
+            if (testLine.empty()) continue;
+            // Split CSV line
+            vector<string> fields;
+            stringstream ss(testLine);
+            string field;
+            while (getline(ss, field, ',')) {
+                fields.push_back(field);
+            }
+
+            if (fields.size() < 5) continue; // Invalid line
+
+            long tweetID = stol(fields[0]);
+            string tweet = fields[4];
+
+            int predictedSentiment = predict(tweet);
+            resFile << predictedSentiment << ", " << tweetID << "\n";
+
+            if (groundTruthMap.find(tweetID) != groundTruthMap.end()) {
+                int actualSentiment = groundTruthMap[tweetID];
+                if (predictedSentiment == actualSentiment)
+                    correct += 1.0;
+                else
+                    errors.emplace_back(make_pair(actualSentiment, tweetID));
+                total += 1.0;
+            }
+        }
+
+        // Calculate accuracy
+        double accuracy = (total > 0) ? (correct / total) : 0.0;
+        accFile << fixed << setprecision(3) << accuracy << "\n";
+
+        // Write errors
+        for (const auto& error : errors) {
+            accFile << error.first << ", " << error.second << "\n";
+        }
+
+        testFile.close();
+        groundFile.close();
+        resFile.close();
+        accFile.close();
+
+        return make_pair(accuracy, errors);
+    }
+};
+
+
 
 // Time and Space Complexity Analysis
 
