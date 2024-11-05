@@ -8,7 +8,7 @@ Used free extension: [ ] 24 hrs or [ ] 48 hrs
 
 [ ] Early submission (48 hrs)
 
-[ ] Bonus work. Describe: ...
+[ ] Bonus work. Describe: Initial accuracy was 61.3%, but we were able to increase it to 63.4% using stop words. 
 
 Place [x] for what applies.
 
